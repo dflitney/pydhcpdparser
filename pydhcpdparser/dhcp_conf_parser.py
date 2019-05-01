@@ -25,7 +25,7 @@ ddns_tokens = (
 
 subnet_tokens = (
     'SUBNET', 'NETMASK', 'POOL', 'FAILOVER', 'PEER', 'RANGE',
-    'OPTION', 'BROADCAST_ADDR', 'ROUTERS', 'DOMAIN_NAME_SERVERS', 'DOMAIN_NAME',
+    'OPTION', 'BROADCAST_ADDR', 'ROUTERS', 'DOMAIN_NAME_SERVERS', 'DOMAIN_NAME', 'GROUP'
 )
 
 allow_deny_pool_ctxt_tokens = (
@@ -471,6 +471,9 @@ def t_DOMAIN_NAME(t):
     r'domain-name'
     return t
 
+def t_GROUP(t):
+    r'group'
+    return t
 
 def t_HOST_NAME(t):
     r'host-name'
@@ -725,10 +728,19 @@ def p_subnet_block(p):
                      | option_decls
                      | pool_decl option_decls
                      | option_decls pool_decl
+                     | subnet_block group_decl
+                     | group_decl subnet_block
     '''
     p[0] = {}
     for i in range(1, len(p)):
         p[0].update(p[i])
+
+
+# Host group block declaration
+
+def p_group_decl(p):
+    ''' group_decl : GROUP BRACE_OPEN host_blocks BRACE_CLOSE '''
+    p[0] = {p[1]: p[3]}
 
 
 # Pool block declaration

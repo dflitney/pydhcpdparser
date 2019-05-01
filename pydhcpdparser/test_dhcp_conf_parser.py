@@ -26,7 +26,8 @@ class TestDHCPConfParser(TestCase):
               (subnet_pool_failover_only, exp_subnet_pool_failover_only),
               (subnet_pool_range_only, exp_subnet_pool_range_only),
               (subnet_pool_range_failover, exp_subnet_pool_range_failover),
-              (subnet_with_options, exp_subnet_with_options)
+              (subnet_with_options, exp_subnet_with_options),
+              (subnet_with_host_group, exp_subnet_with_host_group)
     )
     @ddt.unpack
     def test_subnet_stmt(self, conf, exp):

@@ -254,3 +254,59 @@ exp_pool_with_allow_deny = [
                        'unauthenticated clients',
                        'after 4 2007/08/24 09:14:32']},
      'subnet': '10.198.146.0'}]
+
+subnet_with_host_group = """
+subnet 10.198.146.0 netmask 255.255.255.192 {
+    pool {
+        deny known-clients;
+        deny unknown-clients;
+        deny dynamic bootp clients;
+        allow authenticated clients;
+        deny unauthenticated clients;
+        allow all clients;
+        deny after 4 2007/08/24 09:14:32;
+        allow members of "test-class";
+    }
+    group {
+        host jbox {
+            hardware ethernet 01:d0:06:b8:68:34;
+            fixed-address 192.168.0.5;
+            ddns-hostname "jbox";
+            ddns-domainname "home";
+            option host-name "jbox";
+            option domain-name "home";
+        }
+        host pbox {
+            hardware ethernet 01:d0:07:b9:67:44;
+            fixed-address 192.168.0.25;
+            ddns-hostname "pbox";
+            ddns-domainname "home";
+            option host-name "pbox";
+            option domain-name "home";
+        }
+    }
+}
+"""
+exp_subnet_with_host_group = [
+    {'group': {'host': {'jbox ': {'ddns-domainname': '"home"',
+                                   'ddns-hostname': '"jbox"',
+                                   'fixed-address': '192.168.0.5',
+                                   'hardware': {'ethernet': '01:d0:06:b8:68:34'},
+                                   'option': {'domain-name': '"home"',
+                                              'host-name': '"jbox"'}},
+                         'pbox ': {'ddns-domainname': '"home"',
+                                   'ddns-hostname': '"pbox"',
+                                   'fixed-address': '192.168.0.25',
+                                   'hardware': {'ethernet': '01:d0:07:b9:67:44'},
+                                   'option': {'domain-name': '"home"',
+                                              'host-name': '"pbox"'}}}},
+     'netmask': '255.255.255.192',
+     'pool': {'allow': ['authenticated clients',
+                        'all clients',
+                        'members of "test-class"'],
+              'deny': ['known-clients',
+                       'unknown-clients',
+                       'dynamic bootp clients',
+                       'unauthenticated clients',
+                       'after 4 2007/08/24 09:14:32']},
+     'subnet': '10.198.146.0'}]
